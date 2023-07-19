@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="70bd9d44-c56c-4f9d-9edb-3753d1359cc6" >
+		<http:listener-connection host="0.0.0.0" port="8086" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="a31e4e69-92b0-4914-9180-cf3ab575a14c" >
+		<http:request-connection host="localhost" port="8085" />
+	</http:request-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="dbe6f410-a84e-4cad-9039-be3f63d5cd24" >
+		<file:connection workingDir="C:\Users\Oliver\Desktop" />
+	</file:config>
+	<flow name="e-usersFlow" doc:id="d7e96ea3-7ee7-4106-b6a1-8eece2f06368" >
+		<http:listener doc:name="Listener" doc:id="c4c93a0c-a851-41cc-9601-c65836fb3ba9" config-ref="HTTP_Listener_config" path="/e-users" allowedMethods="POST"/>
+		<http:request method="GET" doc:name="Request" doc:id="82f3f524-d19b-4ff7-b9ee-f5d9cc1daa6b" config-ref="HTTP_Request_configuration" path="/test"/>
+		<file:write doc:name="Write" doc:id="5f613d27-5b4e-4d3e-ad14-26bb87535a99" config-ref="File_Config" path="#[&quot;C:/User/Oliver/Desktop/&quot; ++ now() as String {format: 'yyyyMMddHHmmss'} ++ &quot;.json&quot;]"/>
+	</flow>
+</mule>
